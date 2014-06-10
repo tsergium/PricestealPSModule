@@ -1,0 +1,4 @@
+PricestealPSModule
+==================
+
+Pricesteal PrestaShop Module
