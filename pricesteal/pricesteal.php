@@ -58,6 +58,8 @@ class Pricesteal extends Module
 			!$this->registerHook('actionProductUpdate') OR
 			!$this->registerHook('displayFooterProduct') OR
 			!$this->registerHook('displayLeftColumnProduct') OR
+			!$this->registerHook('productTab') OR
+			!$this->registerHook('productTabContent') OR
 			!$this->runSql($sql)
 		) {
 			return FALSE;
@@ -309,8 +311,21 @@ class Pricesteal extends Module
 		}
     }
 	
-//	public function hookDisplayLeftColumnProduct($params)
-//	{
-//		return $this->display(__FILE__, 'views/admin/form.tpl');
-//	}
+    /**
+    * hookDisplayLeftColumnProduct
+    *
+    * Extra actions on the product page (left column).
+    * 
+    **/
+    public function hookDisplayLeftColumnProduct($params)
+    {
+		$this->context->controller->addCSS($this->_path.'css/pricesteal.css');
+		$id_product = Tools::getValue('id_product');
+		$this->context->smarty->assign(
+			array(
+				'idProduct'		=> $id_product,
+			)
+		);
+		return $this->display(__FILE__, 'views/frontend/prices.tpl');
+    }
 }
