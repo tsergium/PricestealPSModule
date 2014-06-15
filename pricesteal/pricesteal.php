@@ -321,9 +321,28 @@ class Pricesteal extends Module
     {
 		$this->context->controller->addCSS($this->_path.'css/pricesteal.css');
 		$id_product = Tools::getValue('id_product');
+		$competitors = array();
+		
+		$pricestealSettings = Pricesteal_Settings::fetchSettings();
+		if($pricestealSettings)
+		{
+			foreach($pricestealSettings as $key => $value)
+			{
+				$pricestealProduct = Pricesteal_Product::loadByIdProduct($id_product, $value['id']);
+				if($pricestealProduct)
+				{
+					$competitors[$key]['name']			= $value['competitor'];
+					$competitors[$key]['settingsId']	= $value['id'];
+					$competitors[$key]['product_url']	= $pricestealProduct->product_url;
+				}
+			}
+		}
+		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$this->context->smarty->assign(
 			array(
 				'idProduct'		=> $id_product,
+				'competitors'	=> $competitors,
+				'currency'		=> $currency->iso_code
 			)
 		);
 		return $this->display(__FILE__, 'views/frontend/prices.tpl');

@@ -21,25 +21,24 @@ function fetchPrice($domElem, $url)
 }
 
 $id_product = Tools::getValue('idProduct');
+$id_settings = Tools::getValue('idSettings');
 $return = array();
 
-$pricestealSettings = Pricesteal_Settings::fetchSettings();
-if($pricestealSettings)
+
+$pricestealProduct = Pricesteal_Product::loadByIdProduct($id_product, $id_settings);
+$productUrl = $pricestealProduct->product_url;
+if($productUrl)
 {
-	foreach($pricestealSettings as $key => $value)
+	$settings = Pricesteal_Settings::find($id_settings);
+	if($settings)
 	{
-		$pricestealProduct = Pricesteal_Product::loadByIdProduct($id_product, $value['id']);
-		$productUrl = $pricestealProduct->product_url;
-		if($productUrl)
+		$price = fetchPrice($settings[0]['regex'], $productUrl);
+		if($price)
 		{
-			$price = fetchPrice($value['regex'], $productUrl);
-			if($price)
-			{
-				$return[$key]['competitor'] = $value['competitor'];
-				$return[$key]['price']		= $price;
-			}
+			$return['price']		= $price;
 		}
 	}
 }
+
 echo Tools::jsonEncode( $return );
 exit;

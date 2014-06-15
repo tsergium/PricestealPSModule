@@ -1,7 +1,7 @@
 <?php
 class Pricesteal_Product extends ObjectModel
 {
-	public $id_pricesteal;
+	public $id_settings;
 	public $id_product;
 	public $product_url;
 	

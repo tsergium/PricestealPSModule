@@ -6,6 +6,16 @@ class Pricesteal_Settings extends ObjectModel
 	 * used for returning all saved settings for module
 	 * @return type
 	 */
+    public static function find($id){
+		$sql = "
+			SELECT *
+			FROM `"._DB_PREFIX_."ts_pricesteal_settings` AS tsps   
+			WHERE `id` = '{$id}'
+		";
+        $result = Db::getInstance()->ExecuteS($sql);
+		return $result;
+    }
+	
     public static function fetchSettings(){
 		$sql = "
 			SELECT *
